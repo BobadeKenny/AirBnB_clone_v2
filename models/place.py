@@ -53,6 +53,7 @@ class Place(BaseModel, Base):
         def amenities(self):
             """returns the list of Reviw instances"""
             from models import storage
+            from models.amenity import Amenity
             all_amenities = storage.all(Amenity)
             instances = []
             for key, val in all_amenities.items():
