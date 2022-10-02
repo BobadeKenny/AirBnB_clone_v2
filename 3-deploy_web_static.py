@@ -15,8 +15,8 @@ def do_pack():
     now = datetime.now().strftime('%Y%m%d%H%M%S')
     path = 'versions/web_static_{}.tgz'.format(now)
 
-    local('mkdir -p versions/')
-    createArchive = local('tar -cvzf {} web_static/'.format(path))
+    local('mkdir -p versions')
+    createArchive = local('tar -cvzf {} web_static'.format(path))
 
     if createArchive.failed:
         return None
