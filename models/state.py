@@ -14,7 +14,7 @@ class State(BaseModel, Base):
     cities = relationship("City", order_by=City.id, back_populates="state")
 
 
-if os.environ.get("HBNB_TYPE_STORAGE") == "db":
+if os.environ.get("HBNB_TYPE_STORAGE") != "db":
     @property
     def cities(self):
         """returns the list of City instances"""
