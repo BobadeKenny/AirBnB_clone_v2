@@ -34,34 +34,34 @@ class Place(BaseModel, Base):
     user = relationship("User", back_populates="places")
     cities = relationship("City", back_populates="places")
     reviews = relationship("Review", back_populates="place")
-    amenities = relationship("Amenity",
+    amenities = relationship("Amenity", back_populates="place_amenities",
                              secondary=place_amenity, viewonly=False)
 
-    if os.environ.get("HBNB_TYPE_STORAGE") != "db":
-        @property
-        def reviews(self):
-            """returns the list of Reviw instances"""
-            from models import storage
-            all_reviews = storage.all(Review)
-            instances = []
-            for key, val in all_reviews.items():
-                if val["place_id"] == self.id:
-                    instances.append(val)
-            return instances
+if os.environ.get("HBNB_TYPE_STORAGE") != "db":
+    @property
+    def reviews(self):
+        """returns the list of Reviw instances"""
+        from models import storage
+        all_reviews = storage.all(Review)
+        instances = []
+        for key, val in all_reviews.items():
+            if val["place_id"] == self.id:
+                instances.append(val)
+        return instances
 
-        @property
-        def amenities(self):
-            """returns the list of Reviw instances"""
-            from models import storage
-            from models.amenity import Amenity
-            all_amenities = storage.all(Amenity)
-            instances = []
-            for key, val in all_amenities.items():
-                if val["id"] in self.amenity_ids:
-                    instances.append(val)
-            return instances
+    @property
+    def amenities(self):
+        """returns the list of Reviw instances"""
+        from models import storage
+        from models.amenity import Amenity
+        all_amenities = storage.all(Amenity)
+        instances = []
+        for key, val in all_amenities.items():
+            if val["id"] in self.amenity_ids:
+                instances.append(val)
+        return instances
 
-        @amenities.setter
-        def amenities(self, obj):
-            if (obj.__name__ == "Amenity"):
-                self.amenity_ids.append(obj.id)
+    @amenities.setter
+    def amenities(self, obj):
+        if (obj.__name__ == "Amenity"):
+            self.amenity_ids.append(obj.id)
